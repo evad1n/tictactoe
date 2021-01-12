@@ -1,0 +1,47 @@
+:root{
+    --box-size: 100px;
+}
+
+body{
+    text-align: center;
+    background-color: black;
+    color: white;
+    font-family: sans-serif;
+    margin-top: 5%;
+}
+
+#board{
+    width: calc(3 * var(--box-size) + 12px);
+    height: calc(3 * var(--box-size) + 12px);
+    margin: auto;
+    background-color: white;
+}
+
+.tile{
+    float: left;
+    width: var(--box-size);
+    height: var(--box-size);
+    border: 2px solid black;
+    font-size: 5rem;
+    color: black;
+}
+
+#again{
+    width: 400px;
+    height: 100px;
+    margin: auto;
+    font-size: 4rem;
+    cursor: pointer;
+}
+
+#again:hover{
+    background-color: red;
+}
+
+.x{
+    background-color: darkred;
+}
+
+.o{
+    background-color: darkgreen;
+}
