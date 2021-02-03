@@ -1,27 +1,33 @@
 let tiles = document.querySelectorAll(".tile");
-let winner = document.querySelector("#winner");
+let winnerTxt = document.querySelector("#winner");
 let again = document.querySelector("#again");
-let turn = document.querySelector("#turn");
+let turn = document.querySelector("#turn").children[0];
 
 let xTurn = true;
 let playing = true;
 let turnCounter = 0;
+
+reset();
 
 tiles.forEach(tile => {
     tile.onclick = play;
 });
 
 // Wipe board and restart
-again.onclick = function () {
+again.onclick = reset;
+
+function reset() {
     tiles.forEach(tile => {
         tile.innerHTML = "";
         tile.classList.remove("x");
         tile.classList.remove("o");
+        tile.classList.remove("win");
+        tile.classList.add("empty");
     });
     playing = true;
     xTurn = true;
     turn.innerHTML = "X";
-    winner.innerHTML = "";
+    winnerTxt.innerHTML = "";
     again.style.display = "none";
     turnCounter = 0;
 };
@@ -31,27 +37,25 @@ function play(x) {
         xTurn ? x.target.innerHTML = "X" : x.target.innerHTML = "O";
         xTurn ? x.target.classList.add("x") : x.target.classList.add("o");
         turnCounter++;
+        x.target.classList.remove("empty");
 
-        let winChar = bitwiseWinner();
-        console.log(winChar);
+        let { winner, winSet } = bitwiseWinner();
 
-        if (winChar == "X") {
-            winner.innerHTML = "X Wins!";
+        if (winner != "none") {
             playing = false;
             again.style.display = "block";
-        }
-        else if (winChar == "O") {
-            winner.innerHTML = "O Wins!";
-            playing = false;
-            again.style.display = "block";
-        }
-        else if (winChar == "tie") {
-            winner.innerHTML = "Nobody Wins!";
-            playing = false;
-            again.style.display = "block";
-        }
-        else {
-            winner.innerHTML = "";
+
+            if (winner != "tie") {
+                winnerTxt.innerHTML = winner == "X" ? "X Wins!" : "O Wins!";
+                // Highlight winning tiles
+                for (let i = 0; i < winSet.length; i++) {
+                    if (winSet[i] == "1") {
+                        tiles[i].classList.add("win");
+                    }
+                }
+            } else {
+                winnerTxt.innerHTML = "Nobody Wins!";
+            }
         }
 
         xTurn = !xTurn;
@@ -120,6 +124,10 @@ let bitSet = [
 
 //bitwise win condition
 function bitwiseWinner() {
+    let ret = {
+        winner: "none",
+        winSet: null
+    };
     let set = "";
 
     for (let i = 0; i < tiles.length; i++) {
@@ -134,12 +142,16 @@ function bitwiseWinner() {
         let j = (parseInt(set, 2) & parseInt(bitSet[i], 2) >>> 0).toString(2);
 
         if (parseInt(j, 2) === parseInt(bitSet[i], 2)) {
-            return xTurn ? "X" : "O";
+            ret.winner = xTurn ? "X" : "O";
+            ret.winSet = bitSet[i];
+            return ret;
         }
     }
 
-    if (turnCounter >= 9)
-        return "tie";
+    if (turnCounter >= 9) {
+        ret.winner = "tie";
+        return ret;
+    }
 
-    return "none";
+    return ret;
 }

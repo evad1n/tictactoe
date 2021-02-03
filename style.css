@@ -1,13 +1,22 @@
 :root{
-    --box-size: 100px;
+    --box-size: min(20vh, 25vw);
+}
+
+* {
+    margin: 0;
+    padding: 0;
 }
 
 body{
     text-align: center;
     background-color: black;
     color: white;
-    font-family: sans-serif;
-    margin-top: 5%;
+    font-family: 'Yusei Magic', sans-serif;
+    margin-top: 1rem;
+}
+
+#turn {
+    margin: 10px 0 20px 0;
 }
 
 #board{
@@ -19,29 +28,42 @@ body{
 
 .tile{
     float: left;
+    cursor: default;
     width: var(--box-size);
     height: var(--box-size);
+    line-height: var(--box-size);
     border: 2px solid black;
     font-size: 5rem;
     color: black;
+    transition: 0.2s;
 }
 
-#again{
-    width: 400px;
-    height: 100px;
-    margin: auto;
-    font-size: 4rem;
+.empty {
     cursor: pointer;
 }
 
+.empty:hover {
+    background-color: rgb(189, 189, 189);
+}
+
+.win {
+    background-color: aqua;
+}
+
+#winner {
+    margin: 10px 0;
+}
+
+#again{
+    cursor: pointer;
+    display: flex;
+    margin: auto;
+    padding: 10px 40px;
+    font-size: 3rem;
+    border-radius: 6px;
+    transition: .2s;
+}
+
 #again:hover{
-    background-color: red;
-}
-
-.x{
-    background-color: darkred;
-}
-
-.o{
-    background-color: darkgreen;
+    background-color: rgb(142, 245, 117);
 }
